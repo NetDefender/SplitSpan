@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Text.RegularExpressions;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 
@@ -7,9 +8,10 @@ namespace SplitSpan;
 [MemoryDiagnoser]
 [SimpleJob(RuntimeMoniker.Net48)]
 [SimpleJob(RuntimeMoniker.Net80)]
-public class ParserBenchmarks
+public partial class ParserBenchmarks
 {
     private string _value;
+    private Regex _splitRegex;
 
     [Params(10000)]
     public int Items;
@@ -17,6 +19,7 @@ public class ParserBenchmarks
     [GlobalSetup]
     public void Setup()
     {
+        _splitRegex = new Regex("-", RegexOptions.Compiled);
         _value = string.Join("-", Enumerable.Range(Items, Items));
     }
 
@@ -25,6 +28,18 @@ public class ParserBenchmarks
     {
         int result = 0;
         foreach (string part in _value.Split('-'))
+        {
+            result = int.Parse(part);
+        }
+
+        return result;
+    }
+
+    [Benchmark]
+    public int SplitRegex()
+    {
+        int result = 0;
+        foreach (string part in _splitRegex.Split(_value))
         {
             result = int.Parse(part);
         }
