@@ -1,9 +1,11 @@
 # Split Options
-
+---
 >BenchmarkDotNet v0.13.12
 >Windows 10
 >AMD Ryzen 7 1700 1 CPU 16 logical 8 physical cores
 >10000 Items
+
+> "." => thousands separator
 
 
 | Method               | Runtime            | Mean (us)| Gen0     | Gen1     | Gen2    | Allocated (Bytes)|
